@@ -2,7 +2,7 @@
 
 
 import sys
-from setuptools import setup, find_packages
+from setuptools import setup
 
 install_requires = [
     'future'
@@ -21,6 +21,8 @@ with open("README.md", "r") as f:
 setup(
   name = "v1pysdk",
   version = "0.5.1",
+  #name = "v1pysdk-unofficial",
+  #version = "0.4.post4",
   description = "VersionOne API client",
   author = "Joe Koberg (VersionOne, Inc.)",
   author_email = "Joe.Koberg@versionone.com",
@@ -59,16 +61,10 @@ setup(
 
   #tests don't work, so ignore them
   #tests_require = [
-  #    'testtools'
+  #    'testtools',
+  #    'iso8601',
   #],
   #  
   #test_suite = "v1pysdk.tests",
 
-  )
-
-
-
-
-
-
-
+)
