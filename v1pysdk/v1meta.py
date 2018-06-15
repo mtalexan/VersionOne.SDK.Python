@@ -95,7 +95,7 @@ class V1Meta(object):
           self.dirtylist = []
       return errors
     
-  def generate_update_doc(self, newdata):
+  def generate_update_doc(self, newdata, currentdata = None):
     update_doc = Element('Asset')
     for attrname, newvalue in newdata.items():
       if newvalue is None: # single relation was removed
@@ -110,13 +110,23 @@ class V1Meta(object):
         ra.set('idref', newvalue.idref)
         node.append(ra)
       elif isinstance(newvalue, list): # multi relation was changed
+        currentvalue = []
+        if currentdata is not None:
+            currentvalue = currentdata[attrname]
         node = Element('Relation')
         node.set('name', attrname)
         for item in newvalue:
-          child = Element('Asset')
-          child.set('idref', item.idref)
-          child.set('act', 'add')
-          node.append(child)
+          if item not in currentvalue:
+              child = Element('Asset')
+              child.set('idref', item.idref)
+              child.set('act', 'add')
+              node.append(child)
+        for item in currentvalue:
+          if item not in newvalue:
+              child = Element('Asset')
+              child.set('idref', item.idref)
+              child.set('act', 'remove')
+              node.append(child)
       else: # Not a relation
         node = Element('Attribute')
         node.set('name', attrname)
@@ -134,8 +144,8 @@ class V1Meta(object):
     asset_type, asset_oid, asset_moment = new_asset_xml.get('id').split(':')
     return self.asset_class(asset_type)(asset_oid)
     
-  def update_asset(self, asset_type_name, asset_oid, newdata):
-    update_doc = self.generate_update_doc(newdata)
+  def update_asset(self, asset_type_name, asset_oid, newdata, currentdata):
+    update_doc = self.generate_update_doc(newdata, currentdata)
     return self.server.update_asset(asset_type_name, asset_oid, update_doc)
     
   def execute_operation(self, asset_type_name, oid, opname):
