@@ -125,7 +125,7 @@ class V1Meta(object):
             node.text = str(newvalue).decode('utf-8')
         else:
             node.text = newvalue
-       update_doc.append(node)
+        update_doc.append(node)
     return update_doc
     
   def create_asset(self, asset_type_name, newdata):
