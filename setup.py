@@ -5,12 +5,15 @@ import sys
 from setuptools import setup
 
 install_requires = [
-    'future'
+    'future',
+    'testtools',
+    'unittest2'
 ]
 
 if (sys.version_info < (3,0)):
     # has a different name if supporting Python3
     install_requires.append('python-ntlm')
+    install_requires.append("repoze.lru")
 else:
     install_requires.append('python-ntlm3')
 
@@ -59,6 +62,7 @@ setup(
 
   tests_require = [
       'testtools',
+      'repoze.lru',
       'unittest2' # so testtools tests are auto-discovered
   ],
   test_suite = "tests",
